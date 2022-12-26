@@ -55,4 +55,14 @@ router.get('/:id',async (req,res)=>{
     }
 })
 
+router.get("/seller/:id", auth ,async (req,res)=>{
+    try {
+        const products= await Product.find({userId:req.params.id})
+        res.status(200).json(products)
+    } catch (error) {
+        console.error(error.message)
+        res.status(500).json({msg:"server error"})
+    }
+})
+
 module.exports=router;
