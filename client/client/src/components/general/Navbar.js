@@ -9,7 +9,7 @@ const Navbar = ({auth:{isAuthenticated}, logout}) => {
         <li><Link to="/register?role=seller" >Seller</Link></li>
 
         <li><Link to="/login" onClick={logout} >
-            <span className='hide-on=mobile' >Logout</span>
+            <span className='hide-on-mobile' >Logout</span>
             </Link></li>
     </ul> )
 
@@ -24,7 +24,7 @@ const Navbar = ({auth:{isAuthenticated}, logout}) => {
     <nav className='main-navbar bg-dark' >
         <h1>
             <Link to='/'>
-                <i className='fas fa-store' ></i> Web Shop
+            <i className="fas fa-store"></i> Web Shop
             </Link>     
         </h1>
        {isAuthenticated?user:guest}

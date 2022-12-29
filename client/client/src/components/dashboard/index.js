@@ -7,11 +7,25 @@ import { logout } from "../../actions/authActions";
 import "../../Dashboard.css";
 
 class Dashboard extends Component {
-  state = {
-    child: this.props.nestedRoute,
-    search: "",
-  };
-  
+  constructor(props) {
+    super(props);
+    this.state = {
+      child: props.nestedRoute,
+      search: "",
+    };
+  }
+  componentDidMount() {
+    this.activeNav();
+  }
+  activeNav() {
+    const pathname = window.location.pathname;
+    const possibleRoutes = [
+      { routes: "/dashboard", targetId: "home" },
+      { routes: "/addProduct", targetId: "addProduct" },
+      { routes: "/products", targetId: "products" },
+      { routes: "/profile", targetId: "profile" },
+    ]; 
+  }
 
   avatarText = (name) => {
     let initial = "";
@@ -26,7 +40,7 @@ class Dashboard extends Component {
     e.preventDefault();
     this.props.logout();
   };
-  
+
 
   render() {
     const {user}=this.props.auth
@@ -74,7 +88,7 @@ class Dashboard extends Component {
             </li>
             <hr className="sidebar-divider" />
             <li className="nav-item">
-              <Link className="nav-link" to="/dashboard/profile">
+              <Link className="nav-link" to="/dashboard/Profile">
                 <i className="far fa-id-card"></i>
                 <span>Profile</span>
               </Link>

@@ -64,5 +64,14 @@ router.get("/seller/:id", auth ,async (req,res)=>{
         res.status(500).json({msg:"server error"})
     }
 })
+router.get("/instructors/:id", auth, async (req, res) => {
+    try {
+      const products = await Product.find({ userId: req.params.id });
+      res.json(products);
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Server error");
+    }
+  });
 
 module.exports=router;

@@ -35,8 +35,8 @@ const Product = ({
 
 Product.propTypes = {
   product: propTypes.object.isRequired,
-  //description: propTypes.func.isRequired,
-  //ßbuttonName: propTypes.string,
+  // description: propTypes.func.isRequired,
+  // buttonName: propTypes.string,
 };
 
 export default Product;

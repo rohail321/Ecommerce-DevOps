@@ -7,7 +7,6 @@ import setAuthToken from './util/setAuthToken'
 import './App.css';
 
 
-import Navbar from './components/general/Navbar';
 import Landing from './components/landing/index'
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
@@ -18,6 +17,8 @@ import AddProduct from './components/dashboard/components/AddProduct'
 import Products from './components/dashboard/components/Products'
 
 import ProtectedRoute from './components/general/ProtectedRoute'
+import AddProfile from './components/dashboard/components/AddProfile'
+import Profile from './components/dashboard/components/Profile'
 
 
 if(localStorage.token){
@@ -46,6 +47,20 @@ function App(props) {
               path="/dashboard/addProduct"
               component={() => (
                 <Dashboard {...props} nestedRoute={AddProduct} />
+              )}
+            />
+             <ProtectedRoute
+              exact
+              path="/dashboard/addProfile"
+              component={() => (
+                <Dashboard {...props} nestedRoute={AddProfile} />
+              )}
+            />
+            <ProtectedRoute
+              exact
+              path="/dashboard/profile"
+              component={() => (
+                <Dashboard {...props} nestedRoute={Profile} />
               )}
             />
             <ProtectedRoute

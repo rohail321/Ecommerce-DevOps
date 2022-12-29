@@ -1,4 +1,3 @@
-import axios from 'axios'
 import jwtDecode from 'jwt-decode'
 
 const isDevelopment=window.location.hostname.includes("localhost");
@@ -12,4 +11,4 @@ const decodeUser=()=>{
     return jwtDecode(token)
 }
 
-export {getServer}
+export {getServer,decodeUser}
