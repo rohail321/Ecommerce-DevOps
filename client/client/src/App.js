@@ -15,6 +15,7 @@ import Dashboard from './components/dashboard'
 import Home from './components/dashboard/components/Home'
 import AddProduct from './components/dashboard/components/AddProduct'
 import Products from './components/dashboard/components/Products'
+import ProductDetails from './components/landing/ProductDetails'
 
 import ProtectedRoute from './components/general/ProtectedRoute'
 import AddProfile from './components/dashboard/components/AddProfile'
@@ -36,6 +37,8 @@ function App(props) {
     <Router>
     <div className="App">
          <Route exact path="/" component={Landing} />
+         <Route exact path="/product/:id" component={ProductDetails} />
+
          <Switch>  
          <ProtectedRoute
               exact

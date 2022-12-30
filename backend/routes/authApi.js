@@ -35,7 +35,7 @@ check('password','enter password').exists()
         if(!user) return res.status(400).json({errors:[{msg:"user does not exist"}]})
         
         const match= await bcrypt.compare(password,user.password)
-        if(!match) return res.status(400).json({errors:[{msg:"user does not exist"}]})
+        if(!match) return res.status(400).json({errors:[{msg:"incorrect password"}]})
        
         const payload={
             user:{
