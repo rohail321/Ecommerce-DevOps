@@ -16,6 +16,10 @@ import Home from './components/dashboard/components/Home'
 import AddProduct from './components/dashboard/components/AddProduct'
 import Products from './components/dashboard/components/Products'
 import ProductDetails from './components/landing/ProductDetails'
+import { decodeUser } from "./util";
+import { addToCart } from "./actions/cartActions";
+import Cart from './components/customers/Cart'
+
 
 import ProtectedRoute from './components/general/ProtectedRoute'
 import AddProfile from './components/dashboard/components/AddProfile'
@@ -31,13 +35,24 @@ function App(props) {
     store.dispatch(setCurrentUser())
   
   }, [])
+  const grabProductsFromStorage = () => {
+    const userId = decodeUser().user.id;
+    const cartProducts = JSON.parse(localStorage.getItem("products"));
+    const context = { products: cartProducts, userId };
+    store.dispatch(addToCart(context));
+    localStorage.removeItem("products");
+  };
+
+  if (localStorage.getItem("token") && localStorage.getItem("products")) {
+    grabProductsFromStorage();
+  }
   
   return (
     <Provider store={store} >
     <Router>
     <div className="App">
          <Route exact path="/" component={Landing} />
-         <Route exact path="/product/:id" component={ProductDetails} />
+         <Route exact path="/products/:id" component={ProductDetails} />
 
          <Switch>  
          <ProtectedRoute
@@ -71,8 +86,11 @@ function App(props) {
               path="/dashboard/products"
               component={() => <Dashboard {...props} nestedRoute={Products} />}
             />
+            <ProtectedRoute exact path="/cart" component={Cart} />
+
           <Route  path="/login" component={Login} />
           <Route  path="/register" component={Register} />
+
         </Switch>
     </div>
     

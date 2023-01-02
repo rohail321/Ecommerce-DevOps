@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {GET_PRODUCTS, PRODUCT_ERROR,GET_PRODUCT} from './types'
+import {GET_PRODUCTS, PRODUCT_ERROR, GET_PRODUCT} from './types'
 import {getServer} from '../util'
 
 export const getProducts=()=> async dispatch=>{
@@ -58,14 +58,15 @@ export const getInstructorProducts = (id) => async (dispatch) => {
 
   export const getProduct = (id) => async (dispatch) => {
     try {
-        await axios
-        .get(`${getServer()}/api/products/${id}`)
-        .then((res) =>
-         dispatch ({
-            type: GET_PRODUCT,
-            payload:res.data,
-          })
-        );
+        const res=await axios.get(`${getServer()}/api/products/${id}`)
+        if(res){
+            console.log(res.data)
+            dispatch ({
+                type: GET_PRODUCT,
+                payload:res.data,
+              })
+        }
+        
     } catch (err) {
         dispatch({
             type: PRODUCT_ERROR,

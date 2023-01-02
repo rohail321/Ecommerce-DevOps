@@ -34,14 +34,13 @@ class Products extends Component {
   };
   render() {
     const { products } = this.state;
-    // console.log(products);
     return (
       <div className="container-flex">
         <div className="row">
           {products.map((product, index) => (
             <Product
               key={index}
-              link={`products/${product._id}`}
+              link={`/products/${product._id}`}
               product={product}
               description={this.productDetails(product)}
               thumbnail={product.thumbnail}

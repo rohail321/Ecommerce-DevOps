@@ -14,7 +14,7 @@ router.get('/:id',async(req,res)=>{
     try {
         const profile=await Profile.findOne({userId:req.params.id})
         if(!profile){
-            return res.status(400).json({msg:"Profile does not exist"})
+            return res.status(400).json({profile:{socialMedia:{}}})
         }
         res.json(profile)
     } catch (err) {

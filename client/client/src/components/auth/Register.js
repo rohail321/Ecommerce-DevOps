@@ -1,79 +1,136 @@
-import React, { Component } from 'react'
-import Input from '../general/input'
-import {register} from '../../actions/authActions'
-import {connect} from 'react-redux'
-import {withRouter} from 'react-router-dom'
-import {message} from 'antd'
-
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { message } from "antd";
+import Input from "../general/input";
+import { register } from "../../actions/authActions";
+import { decodeUser } from "../../util";
+import { addToCart } from "../../actions/cartActions";
 
 class Register extends Component {
-    state={
-        name:"",
-        email:"",
-        password:"",
-        password2:""
+  
+  state = {
+    name: "",
+    email: "",
+    password: "",
+    password2: "",
+  };
+  componentWillReceiveProps(nextProps) {
+    const search = this.props.location.search;
+    let split = search.split("redirect=");
+    const hasRirect = search.includes("redirect=");
+    split = split[split.length - 1];
+    console.log(split);
+    if (
+      nextProps &&
+      nextProps.auth.errors &&
+      nextProps.auth.errors.length > 0
+    ) {
+      nextProps.auth.errors.forEach((error) => {
+        message.error(error.msg);
+      });
     }
 
-    componentWillReceiveProps(nextProps){
-        console.log(nextProps)
-        if(nextProps &&nextProps.auth.errors&& nextProps.auth.errors.length>0){
-            nextProps.auth.errors.forEach(error => {
-                message.error(error.msg)
-            });
+    if (nextProps.auth.isAuthenticated) {
+      if (split && hasRirect) {
+        if (
+          split === "/cart" &&
+          localStorage.getItem("token") &&
+          localStorage.getItem("products")
+        ) {
+          const userId = decodeUser().user.id;
+          const cartProducts = JSON.parse(localStorage.getItem("products"));
+          const context = { products: cartProducts, userId };
+          this.props.addToCart(context);
+          localStorage.removeItem("products");
         }
-        if(nextProps.auth.isAuthenticated){
-            message.success("Registered succesfully")
-            setTimeout(()=>this.props.history.push("/"),2000)
-
-        }
+        this.props.history.push(split);
+      } else {
+        message.success("Thank you for signing up");
+        setTimeout(() => this.props.history.push("/"), 3000);
+      }
     }
+  }
 
-    onChange=(e)=>{
-        this.setState({[e.target.name]:e.target.value})
-    }
+  onChange=(e)=> {
+    this.setState({ [e.target.name]: e.target.value });
+  }
 
-    onSubmit=()=>{
-        let role=this.props.location.search.split("?role=")
-        role=role[role.length-1]
-        const {name,email,password,password2}=this.state
-        const newUser={
-            name,
-            email,
-            password, 
-            role
-        }
-        if(password===password2){
-            this.props.register(newUser)
-        }
-        else{
-            message.error("Incorrect password")
-        }
+  onSubmit=()=> {
+    let split = this.props.location.search.split("?role=");
+    split = split[split.length - 1].split("&");
+    const role = split[0];
+
+    const { name, email, password } = this.state;
+    const newUser = {
+      name,
+      email,
+      password,
+      role,
+    };
+    if (password === this.state.password2) {
+      this.props.register(newUser);
+    } else {
+      message.error("Passwords must match");
     }
+  }
+
   render() {
-    const {name,email,password,password2}=this.state
+    const { name, password, password2, email } = this.state;
     return (
-      <div className='container' >
-        <h1 className='large text-primary' >Register</h1>
-        <div className='form'  >
-        <Input type="text" name="name" placeholder="Enter name" value={name} onChange={this.onChange} />
+      <div className="container">
+        <h1 className="large text-primary">Register</h1>
+        <p className="lead">
+          <i className="fas fa-user"></i>Create Your Account
+        </p>
+        <div className="form">
+          <Input
+            name="name"
+            type="text"
+            placeholder="Enter Name"
+            value={name}
+            onChange={this.onChange}
+          />
         </div>
-        <div className='form' >
-        <Input type="email" name="email" placeholder="Enter email" value={email} onChange={this.onChange} />
+        <div className="form">
+          <Input
+            name="email"
+            type="email"
+            placeholder="Enter Email"
+            value={email}
+            onChange={this.onChange}
+          />
         </div>
-        <div className='form' >
-        <Input type="password" name="password" placeholder="Enter password" value={password} onChange={this.onChange} />
+        <div className="form">
+          <Input
+            name="password"
+            type="password"
+            placeholder="Enter Password"
+            value={password}
+            onChange={this.onChange}
+          />
         </div>
-        <div className='form' >
-        <Input type="password" name="password2" placeholder="Confirm password" value={password2} onChange={this.onChange} />
+        <div className="form">
+          <Input
+            name="password2"
+            type="password"
+            placeholder="Confirm Password"
+            value={password2}
+            onChange={this.onChange}
+          />
         </div>
-        <button className='btn btn-primary' onClick={this.onSubmit}>Register</button>
-        </div>
-    )
+        <button className="btn btn-primary" onClick={this.onSubmit}>
+          {" "}
+          Register
+        </button>
+      </div>
+    );
   }
 }
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
 
-const mapStateToProps=(state)=>({
-    auth:state.auth
-})
-
-export default connect(mapStateToProps, {register})(withRouter(Register))
+export default connect(mapStateToProps, { register, addToCart })(
+  withRouter(Register)
+);

@@ -6,10 +6,11 @@ const Cart = require('../models/Cart')
 const auth=require('../middleware/authorization')
 
 
-router.get('/',auth,async (res,req)=>{
+router.get('/',auth,async (req,res)=>{
     try {
-        const userId=req.user.userId
-        const carts=await Cart.find({userId})
+        const userId=req.user.id
+        
+        const carts=await Cart.find({userId:userId})
         if(isEmpty(carts)) return res.send({products:[]})
 
         let retrievedCard;
@@ -24,6 +25,7 @@ router.get('/',auth,async (res,req)=>{
             products= await Promise.all(products)
             result={...retrievedCard.toJSON(),products}
         }
+        console.log(result)
         res.send({result})
     } catch (err) {
         res.status(500).json({msg:"server issue"})
@@ -70,6 +72,8 @@ router.post('/', auth ,async (req,res)=>{
         }
         let value=cart.products.map(async (id)=>await Product.findById(id))
         value=await Promise.all(value)
+        console.log(value)
+        console.log(req.body)
         res.send({...cart.toJSON(),products:value})
     } catch (err) {
         res.status(500).json({msg:"server issue"})
