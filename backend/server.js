@@ -3,7 +3,7 @@ const app=express()
 const connectDB=require("./config/db")
 const morgan=require("morgan")
 const cors=require("cors")
-
+require('dotenv').config()
 const PORT=process.env.PORT||5000;
 
 app.use(cors())
