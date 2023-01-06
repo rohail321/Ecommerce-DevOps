@@ -4,7 +4,7 @@ const { jwtSecret } = require('../config/keys')
 
 const User = require('../models/User');
 const bcrypt=require("bcryptjs")
-const jwt=require("JsonWebToken")
+const jwt=require("jsonwebtoken")
 const {check,validationResult}=require('express-validator')
 
 

@@ -2,7 +2,7 @@ const express = require('express')
 const router=express.Router()
 const {check,validationResult}=require('express-validator')
 const bcrypt=require("bcryptjs")
-const jwt=require("JsonWebToken")
+const jwt=require("jsonwebtoken")
 
 const User = require('../models/User')
 const { jwtSecret } = require('../config/keys')
@@ -43,7 +43,6 @@ check('password','password should be atleast 5 character').isLength({min:5})
         })
         // res.status(200).json({savedUser:savedUser})
     } catch (error) {
-        console.log(error)
         res.status(500).send('server error')
     }
 })
